@@ -22,23 +22,23 @@ class Katex {
 				opener: '\\[',
 				closer: '\\]',
 				displayMode: true,
-				enabled: () => RocketChat.settings.get('Katex_Parenthesis_Syntax')
+				enabled: () => RocketChat.settings.get('Katex_Parenthesis_Syntax'),
 			}, {
 				opener: '\\(',
 				closer: '\\)',
 				displayMode: false,
-				enabled: () => RocketChat.settings.get('Katex_Parenthesis_Syntax')
+				enabled: () => RocketChat.settings.get('Katex_Parenthesis_Syntax'),
 			}, {
 				opener: '$$',
 				closer: '$$',
 				displayMode: true,
-				enabled: () => RocketChat.settings.get('Katex_Dollar_Syntax')
+				enabled: () => RocketChat.settings.get('Katex_Dollar_Syntax'),
 			}, {
 				opener: '$',
 				closer: '$',
 				displayMode: false,
-				enabled: () => RocketChat.settings.get('Katex_Dollar_Syntax')
-			}
+				enabled: () => RocketChat.settings.get('Katex_Dollar_Syntax'),
+			},
 		];
 	}
 
@@ -51,7 +51,7 @@ class Katex {
 				if (op.enabled()) {
 					results.push({
 						options: op,
-						pos: str.indexOf(op.opener, start)
+						pos: str.indexOf(op.opener, start),
 					});
 				}
 			});
@@ -73,10 +73,10 @@ class Katex {
 			return null;
 		}
 
-		//Take the first delimiter found
+		// Take the first delimiter found
 		const pos = Math.min.apply(Math, positions);
 
-		const match_index = (()=> {
+		const match_index = (() => {
 			const results = [];
 			matches.forEach((m) => {
 				results.push(m.pos);
@@ -95,7 +95,7 @@ class Katex {
 		const outer = new Boundary;
 
 		// The closing delimiter matching to the opening one
-		const closer = openingDelimiterMatch.options.closer;
+		const { closer } = openingDelimiterMatch.options;
 		outer.start = openingDelimiterMatch.pos;
 		inner.start = openingDelimiterMatch.pos + closer.length;
 
@@ -108,7 +108,7 @@ class Katex {
 		outer.end = inner.end + closer.length;
 		return {
 			outer,
-			inner
+			inner,
 		};
 	}
 
@@ -137,7 +137,7 @@ class Katex {
 		return {
 			before,
 			latex,
-			after
+			after,
 		};
 	}
 
@@ -146,8 +146,8 @@ class Katex {
 			return katex.renderToString(latex, {
 				displayMode,
 				macros: {
-					'\\href': '\\@secondoftwo' // override \href since allowedProtocols isn't working
-				}
+					'\\href': '\\@secondoftwo', // override \href since allowedProtocols isn't working
+				},
 			});
 		} catch (error) {
 			const e = error;
@@ -200,7 +200,7 @@ class Katex {
 			const token = `=!=${ Random.id() }=!=`;
 			message.tokens.push({
 				token,
-				text: this.renderLatex(latex, displayMode)
+				text: this.renderLatex(latex, displayMode),
 			});
 			return token;
 		});
@@ -211,7 +211,7 @@ class Katex {
 
 const instance = new Katex;
 
-const cb = message => instance.renderMessage(message);
+const cb = (message) => instance.renderMessage(message);
 
 RocketChat.callbacks.add('renderMessage', cb, RocketChat.callbacks.priority.HIGH - 1, 'katex');
 

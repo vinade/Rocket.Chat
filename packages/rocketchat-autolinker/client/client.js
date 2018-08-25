@@ -4,7 +4,7 @@ import Autolinker from 'autolinker';
 const createAutolinker = () => {
 	const regUrls = new RegExp(RocketChat.settings.get('AutoLinker_UrlsRegExp'));
 
-	const replaceAutolinkerMatch = match => {
+	const replaceAutolinkerMatch = (match) => {
 		if (match.getType() !== 'url') {
 			return null;
 		}
@@ -27,17 +27,17 @@ const createAutolinker = () => {
 		urls: {
 			schemeMatches: RocketChat.settings.get('AutoLinker_Urls_Scheme'),
 			wwwMatches: RocketChat.settings.get('AutoLinker_Urls_www'),
-			tldMatches: RocketChat.settings.get('AutoLinker_Urls_TLD')
+			tldMatches: RocketChat.settings.get('AutoLinker_Urls_TLD'),
 		},
 		email: RocketChat.settings.get('AutoLinker_Email'),
 		phone: RocketChat.settings.get('AutoLinker_Phone'),
 		twitter: false,
 		stripTrailingSlash: false,
-		replaceFn: replaceAutolinkerMatch
+		replaceFn: replaceAutolinkerMatch,
 	});
 };
 
-const renderMessage = message => {
+const renderMessage = (message) => {
 	if (RocketChat.settings.get('AutoLinker') !== true) {
 		return message;
 	}
@@ -50,7 +50,7 @@ const renderMessage = message => {
 
 	const autolinker = createAutolinker();
 	message.html = message.html.split(regexTokens)
-		.map(msgPart => {
+		.map((msgPart) => {
 			if (regexTokens.test(msgPart)) {
 				return msgPart;
 			}
